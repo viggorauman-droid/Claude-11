@@ -4,6 +4,7 @@
 # Read-only: changes nothing on your system.
 
 set -u
+export LC_ALL=C   # force "." decimals so number comparisons work in every locale
 OS="$(uname -s)"
 ISSUES=()
 flag() { ISSUES+=("$1"); echo "  [!] $1"; }
@@ -143,7 +144,7 @@ elif have ss; then
   echo "  Processes with most open connections (install nethogs + sudo for bytes):"
   ss -tunp 2>/dev/null | grep -Eo 'users:\(\("[^"]+' | cut -d'"' -f2 | sort | uniq -c | sort -rn | head -10 | sed 's/^/   /'
 fi
-for p in Dropbox OneDrive "Google Drive" iCloud bird backupd steam Steam qbittorrent transmission utorrent "Windows Update"; do
+for p in Dropbox OneDrive "Google Drive" steam Steam qbittorrent transmission utorrent; do
   pgrep -if "$p" >/dev/null 2>&1 && flag "Running: $p — syncing/downloading can saturate your connection"
 done
 
